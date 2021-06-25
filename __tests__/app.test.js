@@ -1,4 +1,4 @@
-const { wrangleLocationResponse, wrangleWeatherResponse } = require('../lib/wrangle.js');
+const { wrangleLocationResponse, wrangleWeatherResponse, wrangleYelpData } = require('../lib/wrangle.js');
 
 require('dotenv').config();
 
@@ -943,5 +943,118 @@ describe('wrangle functions', () => {
     const actual = wrangleWeatherResponse(input);
 
     expect(actual).toEqual(expectation);
+  });
+
+  test('returns formatted Yelp info', async () => {
+    const rawYelpData = [
+      {
+        'id': 'WToFoJxaOlCLijJKkd0UxA',
+        'alias': 'the-abbey-food-and-bar-west-hollywood',
+        'name': 'The Abbey Food & Bar',
+        'image_url': 'https://s3-media2.fl.yelpcdn.com/bphoto/1TTqJZLs3MJzAwj0BvJl3Q/o.jpg',
+        'is_closed': false,
+        'url': 'https://www.yelp.com/biz/the-abbey-food-and-bar-west-hollywood?adjust_creative=hLvgdwJDPYbXXs7G7K4diA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=hLvgdwJDPYbXXs7G7K4diA',
+        'review_count': 2252,
+        'categories': [
+          {
+            'alias': 'gaybars',
+            'title': 'Gay Bars'
+          },
+          {
+            'alias': 'breakfast_brunch',
+            'title': 'Breakfast & Brunch'
+          },
+          {
+            'alias': 'tradamerican',
+            'title': 'American (Traditional)'
+          }
+        ],
+        'rating': 3.5,
+        'coordinates': {
+          'latitude': 34.0834191,
+          'longitude': -118.3851362
+        },
+        'transactions': [
+          'delivery'
+        ],
+        'price': '$$',
+        'location': {
+          'address1': '692 N Robertson Blvd',
+          'address2': null,
+          'address3': '',
+          'city': 'West Hollywood',
+          'zip_code': '90069',
+          'country': 'US',
+          'state': 'CA',
+          'display_address': [
+            '692 N Robertson Blvd',
+            'West Hollywood, CA 90069'
+          ]
+        },
+        'phone': '+13102898410',
+        'display_phone': '(310) 289-8410',
+        'distance': 803.5762749628836
+      },
+      {
+        'id': 'eGXhgVnBrXD7rCDtrXQ_dw',
+        'alias': 'poppy-los-angeles-3',
+        'name': 'Poppy',
+        'image_url': 'https://s3-media2.fl.yelpcdn.com/bphoto/wSi9IeEQmDeSHn0qHPvT0w/o.jpg',
+        'is_closed': false,
+        'url': 'https://www.yelp.com/biz/poppy-los-angeles-3?adjust_creative=hLvgdwJDPYbXXs7G7K4diA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=hLvgdwJDPYbXXs7G7K4diA',
+        'review_count': 124,
+        'categories': [
+          {
+            'alias': 'bars',
+            'title': 'Bars'
+          },
+          {
+            'alias': 'danceclubs',
+            'title': 'Dance Clubs'
+          }
+        ],
+        'rating': 1.5,
+        'coordinates': {
+          'latitude': 34.0850581,
+          'longitude': -118.3766249
+        },
+        'transactions': [],
+        'price': '$$$',
+        'location': {
+          'address1': '755 N La Cienega Blvd',
+          'address2': '',
+          'address3': null,
+          'city': 'Los Angeles',
+          'zip_code': '90069',
+          'country': 'US',
+          'state': 'CA',
+          'display_address': [
+            '755 N La Cienega Blvd',
+            'Los Angeles, CA 90069'
+          ]
+        },
+        'phone': '+13108557185',
+        'display_phone': '(310) 855-7185',
+        'distance': 96.3462491770988
+      }];
+    const expectation = [
+      {
+        'image_url': 'https://s3-media2.fl.yelpcdn.com/bphoto/1TTqJZLs3MJzAwj0BvJl3Q/o.jpg',
+        'name': 'The Abbey Food & Bar',
+        'price': '$$',
+        'rating': 3.5,
+        'url': 'https://www.yelp.com/biz/the-abbey-food-and-bar-west-hollywood?adjust_creative=hLvgdwJDPYbXXs7G7K4diA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=hLvgdwJDPYbXXs7G7K4diA',
+      },
+      {
+        'image_url': 'https://s3-media2.fl.yelpcdn.com/bphoto/wSi9IeEQmDeSHn0qHPvT0w/o.jpg',
+        'name': 'Poppy',
+        'price': '$$$',
+        'rating': 1.5,
+        'url': 'https://www.yelp.com/biz/poppy-los-angeles-3?adjust_creative=hLvgdwJDPYbXXs7G7K4diA&utm_campaign=yelp_api_v3&utm_medium=api_v3_business_search&utm_source=hLvgdwJDPYbXXs7G7K4diA',
+      },
+    ];
+    const mungedYelp = wrangleYelpData(rawYelpData);
+
+    expect(mungedYelp).toEqual(expectation);
   });
 });
