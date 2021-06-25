@@ -22,7 +22,7 @@ jobs:
       env:
         CI: true
         DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres
-        LOCATION_KEY: ${{env.LOCATION_KEY}}
-        WEATHER_KEY: ${{env.WEATHER_KEY}}
-        YELP_KEY: ${{env.YELP_KEY}}
+        LOCATION_KEY: ${{secrets.LOCATION_KEY}}
+        WEATHER_KEY: ${{secrets.WEATHER_KEY}}
+        YELP_KEY: ${{secrets.YELP_KEY}}
 
